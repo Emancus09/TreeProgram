@@ -19,11 +19,11 @@ function createTreeDataTexture(maxDepth: number = 4) {
   }).flat();
   const nodeDataTexture = new THREE.DataTexture(new Uint8Array(nodeData), sizeX, sizeY, THREE.RGFormat, THREE.UnsignedByteType);
   nodeDataTexture.needsUpdate = true;
-  return nodeDataTexture;
+  return [nodeData, nodeDataTexture] as [number[], THREE.DataTexture];
 }
 
 export function createTrees(maxDepth: number = 4) {
-  const treeDataTexture = createTreeDataTexture(maxDepth);
+  const [treeData, treeDataTexture] = createTreeDataTexture(maxDepth);
   const baseMaterial = createTreeMaterial(treeDataTexture, maxDepth, false);
   const pickMaterial = createTreeMaterial(treeDataTexture, maxDepth, true);
   const boxGeometry = new THREE.BoxGeometry(2 / maxDepth, 1, 2 / maxDepth);
@@ -78,6 +78,12 @@ export function createTrees(maxDepth: number = 4) {
       animate();
     });
   }
+  function getBranchInfo(branchId: number) {
+    return {
+      length: treeData[2 * branchId + 0] / 255,
+      angle: treeData[2 * branchId + 1] / 255,
+    }
+  }
 
-  return { baseTree, pickTree, updateMatrices, setBranchAngle, setSelectedId, animateGrowth };
+  return { baseTree, pickTree, updateMatrices, setBranchAngle, setSelectedId, animateGrowth, getBranchInfo };
 }
