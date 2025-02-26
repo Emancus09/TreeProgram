@@ -1,4 +1,4 @@
-import { Divider, Flex, Heading, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Text } from '@chakra-ui/react';
+import { Divider, Flex, Heading, InputGroup, InputLeftAddon, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Text } from '@chakra-ui/react';
 import React from 'react';
 import { SketchProps } from '../sketch/sketchProps';
 
@@ -13,17 +13,16 @@ const Editor: React.FC<EditorProps> = (props: EditorProps) => {
 
   return (
     <Flex height='100%' flexDirection='column' p={4}>
-      <Heading>Hello Vention,</Heading>
-      <Text>My name is Emanuel and this is my submission to your programming challenge!</Text>
-      <Divider my={4} />
-      <Text>Tree Depth:</Text>
-      <NumberInput allowMouseWheel value={props.treeDepth} min={0} max={20} onChange={handleDepthChanged}>
-        <NumberInputField />
-        <NumberInputStepper>
-          <NumberIncrementStepper />
-          <NumberDecrementStepper />
-        </NumberInputStepper>
-      </NumberInput>
+      <InputGroup>
+        <InputLeftAddon>Tree Depth</InputLeftAddon>
+        <NumberInput allowMouseWheel value={props.treeDepth} min={props.minTreeDepth} max={props.maxTreeDepth} onChange={handleDepthChanged}>
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
+      </InputGroup>
     </Flex>
   );
 };

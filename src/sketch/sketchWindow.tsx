@@ -6,9 +6,7 @@ import { SketchProps } from './sketchProps';
 import { createPickHelper } from './pickHelper';
 import { startSpinAnimation } from './spinAnimation';
 
-const backgroundColor = 0x262244;
-
-function initializeSketch(canvas: HTMLCanvasElement, maxTreeDepth: number) {
+function initializeSketch(canvas: HTMLCanvasElement, maxTreeDepth: number, onIsReady: () => void) {
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   const controls = new OrbitControls(camera, canvas);
   controls.target.set(0, 4, 0);
@@ -32,7 +30,6 @@ function initializeSketch(canvas: HTMLCanvasElement, maxTreeDepth: number) {
     canvas
   });
   function animate() {
-    renderer.setClearColor(backgroundColor, 1);
     resizeCanvasToDisplaySize();
     controls.update();
     const time = (new Date()).getTime() / 1000;
@@ -41,15 +38,14 @@ function initializeSketch(canvas: HTMLCanvasElement, maxTreeDepth: number) {
     trees.setBranchAngle(branchAngle);
     renderer.render(baseScene, camera);
   }
+  renderer.setClearColor(0, 0);
   renderer.setAnimationLoop(animate);
-  startSpinAnimation(camera, controls, 4, 15, 0, 5, 5);
+  startSpinAnimation(camera, controls, 4, 15, 0, 5, 5).then(onIsReady);
 
   const pick = createPickHelper();
   let hoveredId = 0;
   canvas.addEventListener('mousemove', (event) => {
-    renderer.setClearColor(0, 1);
     const pickedId = pick(camera, renderer, pickScene, event.offsetX, event.offsetY);
-    renderer.setClearColor(backgroundColor, 1);
     hoveredId = pickedId;
     trees.setSelectedId(pickedId);
   });
@@ -68,7 +64,7 @@ const SketchWindow: React.FC<SketchProps> = (props: SketchProps) => {
     if (!canvas) {
       return;
     }
-    const { trees } = initializeSketch(canvas, props.maxTreeDepth);
+    const { trees } = initializeSketch(canvas, props.maxTreeDepth, props.onIsReady);
     treesRef.current = trees;
   },
     [canvasRef]

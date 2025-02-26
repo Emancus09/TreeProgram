@@ -2,6 +2,7 @@ export interface SketchProps {
   minTreeDepth: number,
   maxTreeDepth: number,
   treeDepth: number;
+  onIsReady: () => void,
 }
 
 export function getDefaultSketchProps() {
