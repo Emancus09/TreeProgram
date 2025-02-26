@@ -72,7 +72,7 @@ const SketchWindow: React.FC<SketchWindowProps> = (props: SketchWindowProps) => 
       return;
     }
     const { trees } = initializeSketch(canvas, props.maxTreeDepth, props.onIsReady);
-    trees.animateGrowth(props.treeDepth, props.treeDepth / 1).then(() => {
+    trees.animateGrowth(props.treeDepth, props.treeDepth / 2).then(() => {
       props.onIsAnimatingChanged(false);
     });
     props.onIsAnimatingChanged(true);
@@ -85,7 +85,7 @@ const SketchWindow: React.FC<SketchWindowProps> = (props: SketchWindowProps) => 
   React.useEffect(() => {
     if (!treesRef.current) return;
     if (props.treeDepth === lastDepth) return;
-    treesRef.current.animateGrowth(props.treeDepth, Math.abs(props.treeDepth - lastDepth) / 5).then(() => {
+    treesRef.current.animateGrowth(props.treeDepth, Math.abs(props.treeDepth - lastDepth) / 1).then(() => {
       setLastDepth(props.treeDepth);
       props.onIsAnimatingChanged(false);
     });
