@@ -5,6 +5,7 @@ import { createTrees } from './tree/createTree';
 import { SketchProps } from './sketchProps';
 import { createPickHelper } from './pickHelper';
 import { startSpinAnimation } from './spinAnimation';
+import { createExtraBranchInterfaces } from './tree/createExtraBranchInterfaces';
 
 function initializeSketch(canvas: HTMLCanvasElement, maxTreeDepth: number, onIsReady: () => void) {
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -71,14 +72,19 @@ const SketchWindow: React.FC<SketchWindowProps> = (props: SketchWindowProps) => 
       return;
     }
     const { trees } = initializeSketch(canvas, props.maxTreeDepth, props.onIsReady);
+    trees.animateGrowth(props.treeDepth, props.treeDepth / 1).then(() => {
+      props.onIsAnimatingChanged(false);
+    });
+    props.onIsAnimatingChanged(true);
     treesRef.current = trees;
   },
     [canvasRef]
   );
 
-  const [lastDepth, setLastDepth] = useState(0);
+  const [lastDepth, setLastDepth] = useState(props.treeDepth);
   React.useEffect(() => {
     if (!treesRef.current) return;
+    if (props.treeDepth === lastDepth) return;
     treesRef.current.animateGrowth(props.treeDepth, Math.abs(props.treeDepth - lastDepth) / 5).then(() => {
       setLastDepth(props.treeDepth);
       props.onIsAnimatingChanged(false);
