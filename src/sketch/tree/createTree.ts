@@ -51,11 +51,10 @@ export function createTrees(maxDepth: number = 4) {
   }
   let isAnimationOngoing = false;
   function animateGrowth(targetAge: number, speed: number): Promise<void> {
-    if (isAnimationOngoing) {
-      return Promise.resolve();
-      throw new Error("Must wait for animation to complete");
-    }
     return new Promise((res, rej) => {
+      if (isAnimationOngoing) {
+        rej("Must wait for animation to complete");
+      }
       isAnimationOngoing = true;
       let lastTime = (new Date()).getTime() / 1000;
       let crrtAge = baseMaterial.uniforms['u_age'].value;
@@ -69,6 +68,7 @@ export function createTrees(maxDepth: number = 4) {
         setDepth(crrtAge);
         if (direction * (crrtAge - targetAge) > 0) {
           isAnimationOngoing = false;
+          res();
         } else {
           window.requestAnimationFrame(animate);
         }

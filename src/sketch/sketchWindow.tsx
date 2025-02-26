@@ -56,9 +56,15 @@ function initializeSketch(canvas: HTMLCanvasElement, maxTreeDepth: number, onIsR
   return { trees }
 }
 
-const SketchWindow: React.FC<SketchProps> = (props: SketchProps) => {
+type SketchWindowProps = SketchProps & {
+  onIsReady: () => void;
+  onIsAnimatingChanged: (isAnimating: boolean) => void;
+}
+
+const SketchWindow: React.FC<SketchWindowProps> = (props: SketchWindowProps) => {
   const treesRef = React.useRef<ReturnType<typeof createTrees> | null>(null);
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
+
   React.useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
@@ -73,9 +79,9 @@ const SketchWindow: React.FC<SketchProps> = (props: SketchProps) => {
   React.useEffect(() => {
     if (!treesRef.current) return;
     treesRef.current.animateGrowth(props.treeDepth, props.treeDepth / 5).then(() => {
-      console.log('done');
+      props.onIsAnimatingChanged(false);
     });
-    console.log('start');
+    props.onIsAnimatingChanged(true);
   }, [props.treeDepth]);
 
   return (
