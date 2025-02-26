@@ -12,10 +12,6 @@ const Editor: React.FC<EditorProps> = (props: EditorProps) => {
     props.onPropsChanged({ ...props, treeDepth: newValue });
   }
 
-  useEffect(() => {
-    console.log(props.disabled);
-  }, [props.disabled]);
-
   return (
     <Flex height='100%' flexDirection='column' p={4}>
       <InputGroup>

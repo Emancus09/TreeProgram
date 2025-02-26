@@ -90,7 +90,6 @@ const fragmentShader = `
   `
 
 export function createTreeMaterial(nodeDataTexture: THREE.Texture, treeDepth: number, renderId: boolean) {
-  console.log(nodeDataTexture.image.width, nodeDataTexture.image.height);
   return new THREE.RawShaderMaterial({
     uniforms: {
       'u_nodeData': { value: nodeDataTexture },

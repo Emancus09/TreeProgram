@@ -59,6 +59,7 @@ export function createTrees(maxDepth: number = 4) {
       let lastTime = (new Date()).getTime() / 1000;
       let crrtAge = baseMaterial.uniforms['u_age'].value;
       const direction = targetAge - crrtAge > 0 ? 1 : -1;
+      pickTree.count = baseTree.count = 2 ** Math.max(targetAge, crrtAge) - 1;
       function animate() {
         const crrtTime = (new Date()).getTime() / 1000;
         const dt = crrtTime - lastTime;
@@ -68,6 +69,7 @@ export function createTrees(maxDepth: number = 4) {
         setDepth(crrtAge);
         if (direction * (crrtAge - targetAge) > 0) {
           isAnimationOngoing = false;
+          pickTree.count = baseTree.count = 2 ** targetAge - 1;
           res();
         } else {
           window.requestAnimationFrame(animate);

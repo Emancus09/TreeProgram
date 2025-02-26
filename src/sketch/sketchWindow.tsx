@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { createTrees } from './tree/createTree';
@@ -76,9 +76,11 @@ const SketchWindow: React.FC<SketchWindowProps> = (props: SketchWindowProps) => 
     [canvasRef]
   );
 
+  const [lastDepth, setLastDepth] = useState(0);
   React.useEffect(() => {
     if (!treesRef.current) return;
-    treesRef.current.animateGrowth(props.treeDepth, props.treeDepth / 5).then(() => {
+    treesRef.current.animateGrowth(props.treeDepth, Math.abs(props.treeDepth - lastDepth) / 5).then(() => {
+      setLastDepth(props.treeDepth);
       props.onIsAnimatingChanged(false);
     });
     props.onIsAnimatingChanged(true);
