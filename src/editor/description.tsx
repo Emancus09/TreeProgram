@@ -28,6 +28,8 @@ const Description: React.FC = () => {
       <Spacer my={2} />
       <Text>Selecting the branches to grow is a separate issue. Selecting from a million branches using bounding boxes would have drained precious compute resources for nothing. Instead, I opted to assign each branch a unique id (it's index in the tree) and convert that unique id to a unique color which i could draw to a render buffer covering the pixel being hovered over by the user. I could then map this color back to an id to figure out which branch is being selected.</Text>
       <Spacer my={2} />
+      <Text>I did start working on the code to grow these extra branches but it was made complicated by the way I implemented the tree shader and so I couldn't figure out the trigonometry of it in time. I can explain the issue during our interview.</Text>
+      <Spacer my={2} />
       <Text>Hope you enjoy!</Text>
       <Text>- Emanuel</Text>
     </>);
